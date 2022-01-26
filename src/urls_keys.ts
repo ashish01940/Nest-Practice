@@ -1,0 +1,1 @@
+export const DatabseURL = "mongodb://localhost:27017/nest-practice"

@@ -1,9 +1,36 @@
 import { Body, Controller, Get, Param, Post, Res, Req, Put, Delete, Session, Query, Headers, Ip, HostParam, HttpCode, Patch } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { singleFoodDto } from "./dtos/singlefood.dto"
+// import { singleFoodDto } from "./dtos/singlefood.dto"
+import { FoodService } from './food.service';
+import { food } from "./interfaces/foodinterface";
 
 @Controller('food')
 export class FoodController {
+    constructor(private readonly foodservice: FoodService) { }
+
+    @Post("saveItemfromService")
+    async saveItemfromService(@Body() data: food) {
+        return this.foodservice.saveFoodData(data)
+    }
+    @Get("getAllFood")
+    async getAllFood() {
+        return this.foodservice.getAllFood()
+    }
+    @Get("getFoodById")
+    async getFoodById(@Query("_id") _id: String) {
+        return this.foodservice.getFoodById(_id);
+    }
+    @Get("getFoodByNumber/:numb")
+    async getFoodByNumber(@Param("numb") numb: String) {
+        return this.foodservice.getFoodByNumber(numb);
+    }
+    @Delete("deleteAllRecords")
+    async deleteAllRecords(){
+        return this.foodservice.deleteAllRecords()
+    }
+
+    // -------------------------------------------------------------------------------------------------------
+
     @Get()
     getMeStringFood(): String {
         return "this is a string food"
@@ -34,7 +61,15 @@ export class FoodController {
         @Ip() ip: string,
         @HostParam() hosts: any
     ): any {
-        return { body: body, param: param, session: session, query: query, header: header, ip: ip, host: hosts }
+        return {
+            body: body,
+            param: param,
+            session: session,
+            query: query,
+            header: header,
+            ip: ip,
+            host: hosts
+        }
     }
 
     @Get("chngResponseCode")
@@ -44,13 +79,13 @@ export class FoodController {
     }
 
     @Post("insertFood")
-    getPostData(@Body() sfd: singleFoodDto): (String | number) {
-        return `dto is : {${sfd.dish}}`
+    getPostData(@Body() sfd: food): (String | number) {
+        return `schemas are : {${sfd}}`
     }
 
     @Put("updateData/:id")
-    updateData(@Param("id") id: number, @Body() body: singleFoodDto): string {
-        return `data updated with ${body.dish} of id: ${id}`
+    updateData(@Param("id") id: number, @Body() body: food): string {
+        return `data updated with ${body.name} of id: ${id}`
     }
 
     @Delete("deletaData/:id")
