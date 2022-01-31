@@ -1,35 +1,47 @@
-import { Body, Controller, Get, Param, Post, Res, Req, Put, Delete, Session, Query, Headers, Ip, HostParam, HttpCode, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, Req, Put, Delete, Session, Query, Headers, Ip, HostParam, HttpCode, Patch, Redirect, UsePipes } from '@nestjs/common';
 import { Response, Request } from 'express';
-// import { singleFoodDto } from "./dtos/singlefood.dto"
+import { saveFoodData } from "./dtos/saveFoodData.dto"
 import { FoodService } from './food.service';
 import { food } from "./interfaces/foodinterface";
+import { ValidationPipe } from '@nestjs/common';
 
 @Controller('food')
 export class FoodController {
     constructor(private readonly foodservice: FoodService) { }
 
     @Post("saveItemfromService")
-    async saveItemfromService(@Body() data: food) {
+    @UsePipes(new ValidationPipe({
+        disableErrorMessages: false,
+        // whitelist: true
+    }))
+    saveItemfromService(@Body() data: saveFoodData) {
+        console.log(data);
         return this.foodservice.saveFoodData(data)
     }
     @Get("getAllFood")
-    async getAllFood() {
+    getAllFood() {
         return this.foodservice.getAllFood()
     }
     @Get("getFoodById")
-    async getFoodById(@Query("_id") _id: String) {
+    getFoodById(@Query("_id") _id: String) {
         return this.foodservice.getFoodById(_id);
     }
     @Get("getFoodByNumber/:numb")
-    async getFoodByNumber(@Param("numb") numb: String) {
+    getFoodByNumber(@Param("numb") numb: String) {
         return this.foodservice.getFoodByNumber(numb);
     }
     @Delete("deleteAllRecords")
-    async deleteAllRecords(){
+    deleteAllRecords() {
         return this.foodservice.deleteAllRecords()
     }
 
     // -------------------------------------------------------------------------------------------------------
+
+    @Get("redirect")
+    @Redirect("https://www.google.com")
+    redirectToQuery(@Query("q") q: String) {
+        return { url: `https://www.google.com/search?q=${q}` }
+    }
 
     @Get()
     getMeStringFood(): String {
@@ -42,12 +54,12 @@ export class FoodController {
     }
 
     @Get('getResponse')
-    getMeResponseFood(@Res({ passthrough: true }) res: any): Response {
+    getMeResponseFood(@Res() res: Response): Response {
         return res.status(300).send({ "message": "this is a response type and check the status code" })
     }
 
     @Get('getRequest')
-    getMeRequestFood(@Req() req: Request): (Request | void | string | Object) {
+    getMeRequestFood(@Req() req: Request): (Request | string | Object) {
         return req.url
     }
 

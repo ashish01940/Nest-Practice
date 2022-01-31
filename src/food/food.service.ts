@@ -23,11 +23,11 @@ export class FoodService {
     }
 
     async getAllFood(): Promise<any> {
-        return this.foodModel.find();
+        return this.foodModel.find({}, ['+taste']);
     }
 
     async getFoodById(_id: String): Promise<any> {
-        return this.foodModel.findById(_id);
+        return this.foodModel.findById(_id);    
     }
 
     async getFoodByNumber(numb: String) {

@@ -4,7 +4,7 @@ import * as mongoose from "mongoose"
 export const foodschemaName = "foodies"
 export const foodschema = new mongoose.Schema({
     name: { type: String, required: true },
-    taste: { type: String, enum: ["good", "bad", "very good", "worst"] },
+    taste: { type: String, enum: ["good", "bad", "very good", "worst"], select: false },
     cellNo: { type: String, required: true }
 })
 
