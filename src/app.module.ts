@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as dotenv from "dotenv";
@@ -12,6 +12,11 @@ import { foodModule } from "./food/food.module"
 //env 
 const process = dotenv.config().parsed;
 // import { ConfigModule, ConfigService } from "@nestjs/config"
+import { MyMiddlewareController } from './my-middleware/my-middleware.controller';
+import { MyMiddlewareService } from './my-middleware/my-middleware.service';
+import { MyMiddlewareModule } from './my-middleware/my-middleware.module';
+import { MyMiddlewareMiddleware } from './my-middleware.middleware';
+
 
 // console.log(ConfigService);
 
@@ -25,10 +30,11 @@ const process = dotenv.config().parsed;
       // ConfigModule.forRoot({
       //   envFilePath: [".uat.env", ".dev.env"]
       // }),
-      MongooseModule.forRoot(process.DatabseURL)
+      MongooseModule.forRoot(process.DatabseURL),
+      MyMiddlewareModule
     ],
     controllers: [AppController],
     providers: [AppService],
   }
 )
-export class AppModule { }
+export class AppModule{}
