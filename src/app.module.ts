@@ -16,6 +16,12 @@ import { MyMiddlewareController } from './my-middleware/my-middleware.controller
 import { MyMiddlewareService } from './my-middleware/my-middleware.service';
 import { MyMiddlewareModule } from './my-middleware/my-middleware.module';
 import { MyMiddlewareMiddleware } from './my-middleware.middleware';
+import { CircularImport1Controller } from './circular-import1/circular-import1.controller';
+import { CircularImport1Service } from './circular-import1/circular-import1.service';
+import { CircularImport1Module } from './circular-import1/circular-import1.module';
+import { CircularImport2Controller } from './circular-import2/circular-import2.controller';
+import { CircularImport2Service } from './circular-import2/circular-import2.service';
+import { CircularImport2Module } from './circular-import2/circular-import2.module';
 
 
 // console.log(ConfigService);
@@ -31,10 +37,12 @@ import { MyMiddlewareMiddleware } from './my-middleware.middleware';
       //   envFilePath: [".uat.env", ".dev.env"]
       // }),
       MongooseModule.forRoot(process.DatabseURL),
-      MyMiddlewareModule
+      MyMiddlewareModule,
+      CircularImport1Module,
+      CircularImport2Module
     ],
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [AppController, CircularImport1Controller, CircularImport2Controller],
+    providers: [AppService, CircularImport1Service, CircularImport2Service],
   }
 )
 export class AppModule{}
