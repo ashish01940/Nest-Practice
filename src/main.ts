@@ -1,8 +1,8 @@
-import { ValidationPipe } from '@nestjs/common';
+// import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { json } from "express"
+// import { json } from "express"
 
 async function bootstrap() {
   return NestFactory.create<NestExpressApplication>(AppModule);
